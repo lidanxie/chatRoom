@@ -25,6 +25,44 @@ var proxyTable = config.dev.proxyTable
 var app = express()
 var compiler = webpack(webpackConfig)
 
+/*引入数据库*/
+var mongoose = require('mongoose')
+/*日志文件*/
+var morgan = require('morgan')
+
+/*session存储*/
+var bodyParser = require('body-parser')
+var cookieParser = require('cookie-parser')
+var session = require('cookie-session')
+mongoose.Promise = require('bluebird')
+global.db = mongoose.connect("mongodb://localhost:27017/chatroom")
+
+/*服务器提交的数据json化*/
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
+/*session存储*/
+app.use(cookieParser())
+app.use(session({
+  secret:'chatroom',
+  resave: false,
+  saveUnintialized: true
+}))
+
+/*
+* 配置环境变量和
+* app.locals.pretty = true 
+*/
+var env = process.env.NODE_ENV || 'development'
+if('development' === app.get('env')) {
+  app.set('showStackError', true)
+  app.use(morgan(':method :url :status'))
+  app.locals.pretty = true  
+  mongoose.set('debug', true)
+}
+
+require('../config/routes')(app)
+/*引入*/
+
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
   quiet: true
