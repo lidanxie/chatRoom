@@ -7,9 +7,9 @@
 		</div>
 		<div class="content">
 			<form name="form2">
-				<mu-text-field label="帐号" labelFloat name="username"/>
+				<mu-text-field label="帐号" labelFloat name="username" v-model="username"/>
 				<br/>
-				<mu-text-field label="密码" type="password" labelFloat name="password"/>
+				<mu-text-field label="密码" type="password" labelFloat name="password" v-model="password"/>
 				<br/>
 				<mu-raised-button label="登录" fullWidth @click="submit" primary/>
 			</form>
@@ -26,7 +26,9 @@
 		name:'login',
 		data() {
 			return {
-				loading: ''
+				loading: '',
+				username: '',
+				password: ''
 			}
 		},
 		created() {
@@ -39,19 +41,18 @@
 		},
 		methods: {
 			submit() {
-				var name = document.form2.username.value.trim()
-				var password = document.form2.password.value.trim()
-				if (name !== '' && password !== '') {
-					var data = {
-						name: name,
-						password: password
+				if(this.username !== '' && this.password !== ''){
+					let data = {
+						name: this.username,
+						password: this.password
 					}
-					this.$store.dispatch('loginsubmit', data)
-					document.form2.reset();
+					this.$store.dispatch('loginsubmit', data);
+					this.username = '';
+					this.password = '';
 					this.$store.commit('setIsLogin', true);
 				} else {
 					this.$store.commit('changedialog');
-					this.$store.commit('changedialoginfo', '账号密码不能为空')
+					this.$store.commit('changedialoginfo', '账号密码不能为空');
 				}
 			},
 			register() {
