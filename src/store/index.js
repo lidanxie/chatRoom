@@ -17,12 +17,27 @@ const store = new store({
 		dialoginfo: '',
 		// 注册页面显示控制
 		registertoggle: true,
+		// 存放用户信息
+		user: {
+			name:'',
+			src:'',
+			room:''
+		},
+		robotmsg: [{
+			message:'Hi~有什么想知道的可以问我,随时任您调戏',
+			user:'robot'
+		}],
 	},
 	getter: {
 		getlogintoggle: state => state.logintoggle,
 		getdialog: state => state.dialog,
 		getdialoginfo: state => state.dialoginfo,
-		registertoggle: state => state.registertoggle
+		getregistertoggle: state => state.registertoggle,
+		getusername: state => state.user.name,
+		getuserscr: state => state.user.src,
+		getuserroom: state => state.user.room,
+		getrobotmsg: state => state.robotmsg,
+
 	},
 	mutations: {
 		setIsLogin (state, data) {
@@ -45,6 +60,9 @@ const store = new store({
 		},
 		closeregistertoggle(state) {
 			state.registertoggle = false;
+		},
+		setrobotmsg(state, data) {
+			state.robotmsg.push(data);
 		}
 	},
 	actions: {
@@ -82,6 +100,29 @@ const store = new store({
 				.catch((err) => {
 					console.log(err);
 				})
-		}
+		},
+		getrobatmess({commit}, data) {
+			let robotdata = '';
+			axios.get('/robotapi',{
+				params: data
+			}).then( (data) => {
+				robotdata = JSON.parse(data.data.data);
+				// 分类信息
+				if (robotdata.code === 100000) {
+					commit('setrobotmsg', {message: robotdata.text, user: 'robot'})
+				} else if (robotdata.code === 200000) {
+					let data = robotdata.text + robotdata.url
+					commit('setrobotmsg', {message: data, user: 'robot'})
+				} else if (robotdata.code === 302000) {
+					commit('setrobotmsg', {message: '暂不支持此类对话', user: 'robot'})
+				} else {
+					commit('setrobotmsg', {message: '暂不支持此类对话', user: 'robot'})
+				}
+			}).catch( (err) => {
+				console.log(err);
+			})
+		},
 	}
 })
+
+export default store;
