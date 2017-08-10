@@ -55,5 +55,32 @@
 </script>
 
 <style>
-	/*样式*/
+	.con-input { 
+		width: 100%;
+		position: fixed;
+		height: 50px;
+		bottom: 55px;
+		display: flex;
+		.input {
+			flex: 1;
+			background: #ddd;
+			padding: 4px;
+			input{
+				width: 100%;
+				height: 42px;
+				box-sizing: border-box;
+				border: 1px solid #ddd;
+				color: #333333;
+				font-size: 18px;
+				padding-left: 5px;
+			}
+			.mu-text-field {
+				width: 100%;
+			}
+		}
+		.demo-raised-button {
+			height: 5px;
+			background: #ddd;
+		}
+	}
 </style>
