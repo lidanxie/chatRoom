@@ -30,3 +30,5 @@ mongoose入门:http://ourjs.com/detail/53ad24edb984bb4659000013
 https://cnodejs.org/topic/5206581b44e76d216aae072e
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+更新了登录页，注册页，个人信息页，其他人信息页，目前正在完善机器人聊天页前端。
