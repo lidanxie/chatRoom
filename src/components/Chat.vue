@@ -68,7 +68,12 @@
       })
     },
     methods: {
+      imgupload(){
 
+      },
+      fileup() {
+        
+      }
     },
     computed: {
 
