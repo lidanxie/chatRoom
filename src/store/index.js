@@ -63,6 +63,12 @@ const store = new store({
 		},
 		setrobotmsg(state, data) {
 			state.robotmsg.push(data);
+		},
+		setusername(state, data) {
+			state.user.name = data;
+		},
+		setusersrc(state, data) {
+			state.user.src = data;
 		}
 	},
 	actions: {

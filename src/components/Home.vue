@@ -70,6 +70,46 @@
 	}
 </script>
 
-<style>
-	
+<style scoped>
+	.header{
+		width: 100%;
+		height: 200px;
+		.head {
+			width: 80px;
+			margin: 20px auto 0;
+			img {
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+			}
+		}
+		.name {
+			height: 50px;
+	        line-height: 50px;
+	        color: #ffffff;
+	        font-size:18px;
+	        text-align:center;
+		}
+		.background {
+			position: absolute;
+	        top: 0;
+	        left: 0;
+	        width: 100%;
+	        height: 200px;
+	        z-index: -1; 
+	        filter: blur(10px);
+	        img {
+	        	width: 100%;
+	        	height: 100%;
+	        }
+		}
+	}
+	.logout {
+		width:200px;
+    	margin: 0 auto;
+    	.mu-raised-button {
+    		background:#ff4081;
+        	color:#fff;
+    	}
+	}
 </style>

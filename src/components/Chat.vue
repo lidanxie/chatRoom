@@ -1,53 +1,85 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
+  <transition name="fade">
+    <div class="container" v-show="getchattoggle">
+      <div class="title">
+        <mu-appbar title="Title">
+            <mu-icon-button icon="chevron_left" slot="left" @click="closechat"/>
+            <div class="center">
+                聊天({{Object.keys(getusers).length}})
+            </div>
+            <mu-icon-button icon="expand_more" slot="right" @click="shownotice"/>
+        </mu-appbar>
+      </div>
+      <div class="all-chat">
+          <div style="height:70px"></div>
+          <div>在线人员</div>
+          <div v-for="obj in getusers" class="online">
+              <img :src="obj.src" alt="">
+          </div>
+      </div>
+      <div class="chat">
+        <div v-for="obj in getmesshistoryinfos">
+          <othermsg v-if="obj.username!=getusername" :name="obj.username" :head="obj.src" :msg="obj.msg" :img="obj.img"></othermsg>
+          <mymsg v-if="obj.username==getusername" :name="obj.username" :head="obj.src" :msg="obj.msg" :img="obj.img"></mymsg>
+        </div>
+        <div v-for="obj in getinfos">
+          <othermsg v-if="obj.username!=getusername" :name="obj.username" :head="obj.src" :msg="obj.msg" :img="obj.img"></othermsg>
+          <mymsg v-if="obj.username==getusername" :name="obj.username" :head="obj.src" :msg="obj.msg" :img="obj.img"></mymsg>
+        </div>
+        <div style="height:120px"></div>
+      </div>
+
+      <div class="bottom">
+        <div class="chat">
+            <div class="input">
+                <input type="text" id="message">
+            </div>
+            <mu-raised-button label="发送" class="demo-raised-button" primary @click="submess"/>
+        </div>
+        <div class="functions">
+            <div class="fun-li" @click="imgupload"></div>
+        </div>
+        <input id="inputFile" name='inputFile' type='file' multiple='mutiple' accept="image/*;capture=camera" style="display: none" @change="fileup">
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
-export default {
-  name: 'hello',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+  import Mymsg from './Mymsg.vue';
+  import Othermsg from './Othermsg.vue';
+  import { mapGetters } from 'vuex';
+  export default {
+    name: 'hello',
+    data () {
+      return {
+        socket:''
+      }
+    },
+    created() {
+      const that = this;
+      this.getsocket.on('message', (obj) => {
+        console.log(obj);
+        this.$store.commit('addroomdetailinfos', obj);
+        window.scrollTo(0, 900000);
+      })
+      this.getsocket.on('logout', (obj) => {
+        this.$store.commit('setusers', obj);
+      })
+    },
+    methods: {
+
+    },
+    computed: {
+
+    },
+    components: {
+
     }
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>
