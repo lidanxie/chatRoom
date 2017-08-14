@@ -50,7 +50,7 @@
   import Othermsg from './Othermsg.vue';
   import { mapGetters } from 'vuex';
   export default {
-    name: 'hello',
+    name: 'chat',
     data () {
       return {
         socket:''
@@ -68,6 +68,14 @@
       })
     },
     methods: {
+      closechat() {
+        this.$store.commit('changechattoggle');
+        var obj = {
+          name: this.getusername;
+          roomid: this.getuserroom
+        }
+        this.$store.commit('logout', obj);
+      },
       imgupload(){
 
       },
