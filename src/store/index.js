@@ -3,6 +3,7 @@
 */
 import Vue from 'Vue';
 import Vuex from 'vueX';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -17,6 +18,7 @@ const store = new store({
 		dialoginfo: '',
 		// 注册页面显示控制
 		registertoggle: true,
+		 socket: '',
 		// 存放用户信息
 		user: {
 			name:'',
@@ -27,6 +29,16 @@ const store = new store({
 			message:'Hi~有什么想知道的可以问我,随时任您调戏',
 			user:'robot'
 		}],
+		// 存放历史记录
+	    messhistory: {
+	      infos: []
+	    },
+	        // 存放房间信息，为了方便以后做多房间
+	    roomdetail: {
+	      id: '',
+	      users: {},
+	      infos: []
+	    },
 	},
 	getter: {
 		getlogintoggle: state => state.logintoggle,
@@ -37,7 +49,11 @@ const store = new store({
 		getuserscr: state => state.user.src,
 		getuserroom: state => state.user.room,
 		getrobotmsg: state => state.robotmsg,
-
+		getsocket: state => state.socket,
+		getid: state => state.roomdetail.id,
+		getusers: state => state.roomdetail.users,
+		getinfos: state => state.roomdetail.infos,
+		getmesshistoryinfos: state => state.messhistory.infos,
 	},
 	mutations: {
 		setIsLogin (state, data) {
@@ -69,7 +85,28 @@ const store = new store({
 		},
 		setusersrc(state, data) {
 			state.user.src = data;
-		}
+		},
+		setgetsocket (state, data) {
+	      state.socket = data
+	    },
+	    addroomdetailinfos (state, data) {
+	    	state.roomdetail.infos.push(data);
+	    },
+	    setroomdetailinfos (state) {
+	    	state.roomdetail.infos = [];
+	    },
+	    setusers (state, data) {
+	    	state.roomdetail.users = data;
+	    },
+	    setmesshistoryinfos (state, data) {
+	    	state.messhistory.infos = data;
+	    },
+	    setmesshistoryinfos (state, data) {
+	    	state.messhistory.infos = data;
+	    },
+	    setrobotmsg (state, data) {
+	    	state.robotdata.push(data);
+	    }
 	},
 	actions: {
 		loginsubmit({commit}, data) {
@@ -128,6 +165,25 @@ const store = new store({
 				console.log(err);
 			})
 		},
+		uploadimg({commit}, data) {
+			let config = {
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+			}
+			axios.post('/file/uploadimg', data, config).then((data) => {
+				if(data.data.errno == 0) {
+					console.log("上传成功");
+				}
+			}).catch((err) => {
+				console.log(err);
+			})
+		},
+		getmesshistory({commit}, data) {
+			axios.get('/message', {params: data}).then((data) => {
+				commit('setmesshistoryinfos', data.data.data);
+			}).catch((err) => {
+				console.log(err);
+			})
+		}
 	}
 })
 
